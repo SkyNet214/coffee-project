@@ -1,0 +1,117 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.bg-image {
+    background-image: url("../img/coffee-cup-wallpaper.jpg");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    filter: blur(4px);
+    position: absolute;
+    z-index: -1;
+
+}
+
+#form-div {
+    display: grid;
+    grid-template-areas:
+        "i c v"
+        "r r r"
+        "s s s"
+    ;
+    grid-template-columns: 4fr 4fr 3fr;
+    grid-template-rows: 1fr 2fr 1fr;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    border: 3px solid #f1f1f1;
+}
+
+#form-div * {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+#id {
+    grid-area: i;
+
+}
+
+#remarks {
+    grid-area: r;
+    resize: none;
+}
+
+#check {
+    grid-area: c;
+}
+
+#submit {
+    grid-area: s;
+}
+
+#validation {
+    grid-area: v;
+    text-align: left;
+    /*font-size: ;*/
+    font-weight: 900;
+}
+
+
+button {
+    color: white;
+    background-color:rgb(107, 107, 107);
+    box-shadow: 4px 4px rgb(0,0,0,0.7);
+    transition: all 250ms;
+    transition-property: top, right;
+}
+
+button:hover {
+    top: -2px;
+    right: 2px;
+    background-color: rgb(59, 59, 59);
+}
+
+input {
+    background-color: lightgray;
+    outline: 0;
+}
+
+input:invalid {
+    border: 3px solid red;
+}
+
+input:valid {
+    border: 3px solid green;
+}
+
+input:focus {
+    background-color: white;
+    
+}
+
+textarea {
+    background-color: lightgray;
+    outline: 0;
+}
+
+textarea:focus {
+    background-color: white;
+}
+
+.valid {
+    color:rgb(116, 223, 9);
+}
+
+.invalid {
+    color:rgb(223, 9, 9);
+}
