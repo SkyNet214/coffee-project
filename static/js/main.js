@@ -1,76 +1,34 @@
-async function checkId(id) {
-    const json = await fetch(`/idlist?id=${id}`).then(response => response.json())
-    const valid = await json.valid ? json !== {} : false
-    return valid
-    
-}
+const form = document.getElementById("form");
 
-async function useId(id, remarks) {
-    const valid = await checkId(id)
-    if (valid) {
-        const json = JSON.stringify({
-            id: id,
-            valid: false,
-            remarks: remarks
-        })
-        const response = await fetch(`/idlist`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: `${json}`
-        }).then((response) => response.json())
-        success = response.success ? response != {} : false
-        return {
-            valid: true,
-            success: success
-        }
-        
-    } else {
-        return {
-            valid: false,
-            success: false
-        }
-    }
-}
+// document.getElementById("code-input").setCustomValidity("Please enter a 4-digit code!");
 
-document.getElementById("check").addEventListener("click", function () {
-    checkId(document.getElementById("id").value).then(function (valid) {
-            result_element = document.getElementById("validation")
-            if (valid) {
-                result_element.innerHTML = "\u2714 VALID"
-                result_element.classList.remove("invalid")
-                result_element.classList.add("valid")
+form.addEventListener("submit", (event) => {
+    // Prevent the from from being submitted the default way
+    event.preventDefault();
+
+    // Send the fetch request
+    fetch("/submit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `code=${encodeURIComponent(form.elements.code.value)}&context=${encodeURIComponent(form.elements.context.value)}`
+    })
+        .then(response => response.json())
+        .then(responseJSON => {
+            console.log(responseJSON)
+            element = document.getElementById("result");
+            if (responseJSON.success) {
+            
+                element.innerHTML = '<i class="success">&#10003;</i> Success';
+                element.className = 'success';
+                form.elements.code.value = "";
+                form.elements.context.value = "";
             } else {
-                result_element.innerHTML = "\u274C INVALID"
-                result_element.classList.remove("valid")
-                result_element.classList.add("invalid")
+                element.innerHTML = '<i class="failure">&#10007;</i> Failure';
+                element.className = 'failure';
+                
             }
         })
-})
-
-document.getElementById("submit").addEventListener("click", function () {
-    useId(document.getElementById("id").value, document.getElementById("remarks").value).then((result) => {
-        element = document.getElementById("validation")
-        if (result.valid && result.success) {
-            element.innerHTML = "\u2714 SUCCESS"
-            element.classList.remove("invalid")
-            element.classList.add("valid")
-            document.getElementById("id").value = ""
-            document.getElementById("remarks").value = ""
-        } else if (!result.valid) {
-            element.innerHTML = "\u274C INVALID"
-            element.classList.remove("valid")
-            element.classList.add("invalid")
-        } else if (!result.success) {
-            element.innerHTML = "\u274C ERROR 500"
-            element.classList.remove("valid")
-            element.classList.add("invalid")
-        } else {
-            element.innerHTML = "\u274C ERROR"
-            element.classList.remove("valid")
-            element.classList.add("invalid")
-        }
-    })
-})
-
+        .catch(error => console.error(error));
+});

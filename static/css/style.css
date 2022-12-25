@@ -1,117 +1,141 @@
-* {
-    box-sizing: border-box;
-}
+@import url('https://fonts.cdnfonts.com/css/melody-jazzy');
+@import url('https://fonts.cdnfonts.com/css/coffee-home');
+
 
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
     display: grid;
     place-items: center;
-    font-family: 'Courier New', Courier, monospace;
+    height: 100vh;
+    background-color: black;
+    overflow:hidden;
 }
 
-.bg-image {
+body::before {
+    background-color: black;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-image: url("../img/coffee-cup-wallpaper.jpg");
     background-size: cover;
-    height: 100%;
-    width: 100%;
-    filter: blur(4px);
-    position: absolute;
+    background-position: center;
+    filter: blur(0px) brightness(65%);
     z-index: -1;
-
 }
 
-#form-div {
-    display: grid;
-    grid-template-areas:
-        "i c v"
-        "r r r"
-        "s s s"
-    ;
-    grid-template-columns: 4fr 4fr 3fr;
-    grid-template-rows: 1fr 2fr 1fr;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
-    border: 3px solid #f1f1f1;
-}
-
-#form-div * {
-    padding: 1rem;
-    margin: 1rem;
-}
-
-#id {
-    grid-area: i;
-
-}
-
-#remarks {
-    grid-area: r;
-    resize: none;
-}
-
-#check {
-    grid-area: c;
-}
-
-#submit {
-    grid-area: s;
-}
-
-#validation {
-    grid-area: v;
-    text-align: left;
-    /*font-size: ;*/
-    font-weight: 900;
-}
-
-
-button {
-    color: white;
-    background-color:rgb(107, 107, 107);
-    box-shadow: 4px 4px rgb(0,0,0,0.7);
-    transition: all 250ms;
-    transition-property: top, right;
-}
-
-button:hover {
-    top: -2px;
-    right: 2px;
-    background-color: rgb(59, 59, 59);
+@media (max-width: 800px) {
+    body {
+        background-size: 425%;
+        background-position: 75%;
+        background-position-y: 25%;
+    }
 }
 
 input {
     background-color: lightgray;
-    outline: 0;
-}
+    border-radius: 2rem;
+    padding: 1rem;
+    border: none;
+    box-shadow: 4px 4px rgb(0,0,0,0.7);
 
-input:invalid {
-    border: 3px solid red;
-}
-
-input:valid {
-    border: 3px solid green;
 }
 
 input:focus {
-    background-color: white;
-    
+    outline-color: blue;
+    outline-style: solid;
+    outline-width: 2px;
 }
+
+input:valid {
+    outline-color: green;
+    outline-style: solid;
+    outline-width: 2px;
+}
+
 
 textarea {
     background-color: lightgray;
-    outline: 0;
+    border-radius: 1rem;
+    padding-left: 10px;
+    padding-top: 10px;
+    resize: none;
+    border: none;
+    box-shadow: 4px 4px rgb(0,0,0,0.7);
+
 }
 
 textarea:focus {
-    background-color: white;
+    outline-color: blue;
+    outline-style: solid;
+    outline-width: 2px;
 }
 
-.valid {
-    color:rgb(116, 223, 9);
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.invalid {
-    color:rgb(223, 9, 9);
+button {
+    border-radius: 2rem;
+    padding: 1rem;
+    border: none;
+    background-color: rgb(220, 20, 60);
+    box-shadow: 4px 4px rgb(0,0,0,0.7);
+    transition: all 250ms;
+    transition-property: top, right;
+    color: white;
+    font-weight:700;
+
 }
+
+
+
+button:hover {
+    top: -2px;
+    right: 2px;
+    background-color: rgb(190, 0, 40);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255,255,255);
+    padding: 4rem;
+    padding-top: 3rem;
+    gap: 2rem;
+    border-radius: 1rem;
+    transition: transform;
+}
+
+h1 {
+    text-align: center;
+    font-family: "Coffee Home", sans-serif;
+    font-size: 40px;
+    margin-top: 0;
+}
+
+#result {
+    display: flex;
+    flex-direction: row;
+    font-size: 2rem;
+    font-weight: bolder;
+    justify-content:space-evenly    ;
+    
+}
+
+.success {
+    display: inline-block;
+    color: green;
+  }
+
+.failure {
+    display: inline-block;
+    color: red;
+}
+
