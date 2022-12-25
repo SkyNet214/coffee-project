@@ -17,7 +17,6 @@ app_password = "qcfipoftzfmkiqsl"
 port = 587
 
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -51,3 +50,4 @@ def submit():
     
 
 app.run(host="0.0.0.0", port=80)
+
