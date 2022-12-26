@@ -12,7 +12,10 @@
 <body>
     <form id="form">
         <h1>Coffee Request</h1>
-        <input name="code" id="code-input" type="text" placeholder="Coupon Code" required pattern="\d{4}" pattern="\d*" autocomplete="off">
+        <div class = "input-container">
+            <input name="code" id="code-input" type="text" placeholder="Coupon Code" required pattern = "[0-9]{4}" pattern="\d*" autocomplete="off">
+            <div id="error-message">Invalid code</div>
+        </div>
         <textarea name="context" placeholder="How would you like your coffee?" rows="5"></textarea>
         <button id="submit" type="submit">Submit</button>
         <div id="result"></div>
