@@ -20,8 +20,8 @@ def read_file():
         return json.load(f)
 
 def write_file(username, count):
-    with open(filename, "w+") as f:
-        db = json.load(f)
+    db = read_file()
+    with open(filename, "w") as f:
         if username in db.keys():
             db[username] = count
             json.dump(db, f)
