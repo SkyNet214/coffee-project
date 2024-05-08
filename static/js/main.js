@@ -1,76 +1,81 @@
-async function checkId(id) {
-    const json = await fetch(`/idlist?id=${id}`).then(response => response.json())
-    const valid = await json.valid ? json !== {} : false
-    return valid
-    
-}
+const form = document.getElementById("form");
+const message = document.getElementById("error-message");
+const input = document.getElementById("username-input");
+const result = document.getElementById("result");
+const counter = document.getElementById("counter");
+const count = document.getElementById("count");
+const button = document.getElementById("submit")
 
-async function useId(id, remarks) {
-    const valid = await checkId(id)
-    if (valid) {
-        const json = JSON.stringify({
-            id: id,
-            valid: false,
-            remarks: remarks
-        })
-        const response = await fetch(`/idlist`, {
+
+form.addEventListener("submit", (event) => {
+    // Prevent the from from being submitted the default way
+    event.preventDefault();
+
+    // Send the fetch request
+    if (input.className === "valid")
+        fetch("/submit", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `${json}`
-        }).then((response) => response.json())
-        success = response.success ? response != {} : false
-        return {
-            valid: true,
-            success: success
-        }
-        
-    } else {
-        return {
-            valid: false,
-            success: false
-        }
-    }
-}
+            body: `username=${encodeURIComponent(form.elements.username.value)}&context=${encodeURIComponent(form.elements.context.value)}`
+        })
+            .then(response => response.json())
+            .then(responseJSON => {
+                console.log(responseJSON)
+                const element = document.getElementById("result");
+                const error = document.getElementById("error-message");
+                const input = document.getElementById("username-input")
+                if (responseJSON.count < 0) {
+                    element.innerHTML = '<i class="failure">&#10007;</i> Failure';
+                    element.className = 'failure';
+                    error.innerHTML = "Invalid username";
+                    error.style.display = "block";
+                    input.className = "invalid";
+                } else {
+                    element.innerHTML = '<i class="success">&#10003;</i> Success';
+                    element.className = 'success';
+                    form.elements.context.value = "";
+                    count.innerHTML = responseJSON.count.toString();
+                }
+            })
+            .catch(error => console.error(error));
+});
 
-document.getElementById("check").addEventListener("click", function () {
-    checkId(document.getElementById("id").value).then(function (valid) {
-            result_element = document.getElementById("validation")
-            if (valid) {
-                result_element.innerHTML = "\u2714 VALID"
-                result_element.classList.remove("invalid")
-                result_element.classList.add("valid")
+
+input.addEventListener("blur", () => {
+    counter.style.display = "none";
+    fetch("/checkname", {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: `${form.elements.username.value}`
+    })
+        .then(response => response.json())
+        .then(responseJSON => {
+            if (Object.keys(responseJSON).length === 0 && responseJSON.constructor === Object) {
+                input.className = "invalid";
+                message.style.display = "block";
+                message.innerHTML = "Please enter a valid username"
+
+                
             } else {
-                result_element.innerHTML = "\u274C INVALID"
-                result_element.classList.remove("valid")
-                result_element.classList.add("invalid")
+                counter.style.display = "block";
+                count.innerHTML = responseJSON.count.toString();
+                input.className = "valid";
+                message.style.display = "none";
+                result.innerHTML = "";
             }
         })
-})
-
-document.getElementById("submit").addEventListener("click", function () {
-    useId(document.getElementById("id").value, document.getElementById("remarks").value).then((result) => {
-        element = document.getElementById("validation")
-        if (result.valid && result.success) {
-            element.innerHTML = "\u2714 SUCCESS"
-            element.classList.remove("invalid")
-            element.classList.add("valid")
-            document.getElementById("id").value = ""
-            document.getElementById("remarks").value = ""
-        } else if (!result.valid) {
-            element.innerHTML = "\u274C INVALID"
-            element.classList.remove("valid")
-            element.classList.add("invalid")
-        } else if (!result.success) {
-            element.innerHTML = "\u274C ERROR 500"
-            element.classList.remove("valid")
-            element.classList.add("invalid")
-        } else {
-            element.innerHTML = "\u274C ERROR"
-            element.classList.remove("valid")
-            element.classList.add("invalid")
-        }
-    })
-})
-
+    /*
+    if (input) {
+        input.className = "valid";
+        message.style.display = "none";
+        result.innerHTML = "";
+    } else {
+        input.className = "invalid";
+        message.style.display = "block";
+        message.innerHTML = "Please enter a 4-digit code"
+    }*/
+});

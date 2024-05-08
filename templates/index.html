@@ -10,13 +10,16 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 </head>
 <body>
-    <div class="bg-image"></div>
-    <div id="form-div">
-        <input id="id" type="text" placeholder="Gutschein ID" required pattern="[0-9]{4}">
-        <button id="check"><b>Überprüfen</b></button>
-        <span id="validation"></span>
-        <textarea id="remarks" placeholder="Anmerkungen"></textarea>
-        <button id="submit"><b>Einreichen</b></button>
-    </div>
+    <form id="form">
+        <h1>Coffee Request</h1>
+        <p id="counter" style="display:none;text-align: center;">You have <span id="count" class="bigger"></span> coffees left.</p>
+        <div class ="input-container">
+            <input name="username" id="username-input" type="text" placeholder="Username" autocomplete="on">
+            <div id="error-message">Invalid username</div>
+        </div>
+        <textarea name="context" placeholder="How would you like your coffee?" rows="5"></textarea>
+        <button id="submit" type="submit">Submit</button>
+        <div id="result"></div>
+    </form>
 </body>
 </html>
