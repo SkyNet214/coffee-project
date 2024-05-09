@@ -8,7 +8,7 @@ const button = document.getElementById("submit")
 
 
 form.addEventListener("submit", (event) => {
-    // Prevent the from from being submitted the default way
+    // Prevent the form from being submitted the default way
     event.preventDefault();
 
     // Send the fetch request
@@ -68,14 +68,4 @@ input.addEventListener("blur", () => {
                 result.innerHTML = "";
             }
         })
-    /*
-    if (input) {
-        input.className = "valid";
-        message.style.display = "none";
-        result.innerHTML = "";
-    } else {
-        input.className = "invalid";
-        message.style.display = "block";
-        message.innerHTML = "Please enter a 4-digit code"
-    }*/
 });
