@@ -34,10 +34,9 @@ def create_db_connection(host_name, user_name, user_password, db_name):
             time.sleep(2)
 
 
-connection = create_db_connection(os.getenv("DB_HOST"), os.getenv("MYSQL_USER"), os.getenv("MYSQL_PASSWORD"), os.getenv("MYSQL_DATABASE"))
-
 def query(query: str) -> tuple:
     '''Execute query, return result and handle errors'''
+    connection = create_db_connection(os.getenv("DB_HOST"), os.getenv("MYSQL_USER"), os.getenv("MYSQL_PASSWORD"), os.getenv("MYSQL_DATABASE"))
     result = None
     if connection != None:
         cursor = connection.cursor()
@@ -49,6 +48,7 @@ def query(query: str) -> tuple:
             print(f"Error: {err}")
     else:
         print("Error: No connection to DBMS server")
+    connection.close()
     return result
 
 
@@ -112,7 +112,5 @@ def submit():
     return {}
     
 if __name__ == "__main__":
-    try:
-        app.run(host="0.0.0.0", port=80)
-    except KeyboardInterrupt:
-        connection.close()
+    app.run(host="0.0.0.0", port=80)
+    

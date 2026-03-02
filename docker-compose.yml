@@ -9,6 +9,12 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./init_db:/docker-entrypoint-initdb.d
+    healthcheck: # Added to tell the app when the DB is actually ready
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 3s # Time between checks
+      timeout: 5s # Time to wait for the command to complete
+      start_period: 10s # Time to wait before starting health checks
+      retries: 5  
 
   app:
     build: .
@@ -19,7 +25,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   db_data:
