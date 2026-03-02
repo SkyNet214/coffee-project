@@ -3,9 +3,10 @@ from flask import Flask, request, render_template
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 from mysql.connector import Error
+import time
 
 
-load_dotenv()
+load_dotenv("../.env")
 app = Flask(__name__)
 
 sender_email = "remote.coffee.website@gmail.com"
@@ -15,20 +16,25 @@ port = 587
 
 def create_db_connection(host_name, user_name, user_password, db_name):
     connection = None
-    try:
-        connection = mysql.connector.connect(
-            host=host_name,
-            user=user_name,
-            passwd=user_password,
-            database=db_name
-        )
-        print("MySQL Database connection successful")
-    except Error as err:
-        print(f"Error: {err}")
+    attempts = 5
+    while attempts > 0:
+        try:
+            connection = mysql.connector.connect(
+                host=host_name,
+                user=user_name,
+                passwd=user_password,
+                database=db_name
+            )
+            print("MySQL Database connection successful")
+            return connection
+        except Error as err:
+            attempts -= 1
+            if attempts == 0: raise err
+            print(f"Error: {err}")
+            time.sleep(2)
 
-    return connection
 
-connection = create_db_connection("localhost", os.getenv("DB_USERNAME"), os.getenv("DB_PASSWORD"), "coffee")
+connection = create_db_connection(os.getenv("DB_HOST"), os.getenv("MYSQL_USER"), os.getenv("MYSQL_PASSWORD"), os.getenv("MYSQL_DATABASE"))
 
 def query(query: str) -> tuple:
     '''Execute query, return result and handle errors'''
