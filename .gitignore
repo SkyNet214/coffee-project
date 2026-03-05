@@ -3,3 +3,5 @@
 .git
 __pycache__
 GEMINI.md
+gemini_model_list.txt
+.continue/agents/new-config.yaml

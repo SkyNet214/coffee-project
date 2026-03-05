@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 sender_email = "remote.coffee.website@gmail.com"
 receiver_email = "niklas20066@gmail.com"
-app_password = os.getenv("APP_PASSWORD")
+app_password = os.getenv("APP_PASSWORD", "")
 port = 587
 
 def create_db_connection(host_name, user_name, user_password, db_name):
@@ -46,10 +46,10 @@ def query(query: str) -> tuple:
             connection.commit()
         except Error as err:
             print(f"Error: {err}")
+        connection.close()
     else:
         print("Error: No connection to DBMS server")
-    connection.close()
-    return result
+    return ()
 
 
 def get_user_balance(username: str) -> int:
@@ -69,7 +69,6 @@ def send_notification_email(username: str, context: str):
     msg["Subject"] = "New coffee request received!"
     msg["From"] = sender_email
     msg["To"] = receiver_email
-    context = ssl.create_default_context()
     try:
         server = smtplib.SMTP("smtp.gmail.com", port)
         server.starttls()
@@ -114,3 +113,4 @@ def submit():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
     
+
